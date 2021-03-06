@@ -1,38 +1,229 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lobster Two", cursive;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+html,
+body,
+#root {
   min-height: 100vh;
+  background-color: #f3f3f3;
+  z-index: 1;
+}
+
+.bar {
+  position: fixed;
+  top: -3%;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #eaeaea;
+  padding: 1rem 2rem;
+  z-index: 2;
+  opacity: 0;
+  transition: 0.1s ease;
+  border-bottom: 0.1rem solid #000000;
+  box-shadow: 0 0 0.3rem 0.05rem #b3b3b3;
+  z-index: 3;
+}
+.bar:hover {
+  top: 0;
+  opacity: 1;
+}
+.modal {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  right: 0%;
+  bottom: 0%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #ffffffda;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+  transition: 0.2s ease;
+}
+.modal.active {
+  z-index: 4;
+  transition: 0.1s ease;
+  opacity: 1;
+}
+.modal .input_section {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  right: 0;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem 2em;
+  opacity: 0;
+  background-color: #f3f3f3;
+  border: 0.1rem solid #000000;
+  transform: translate(-50%, -40%);
+  transition: 0.2s ease;
+}
+.modal.active .input_section {
+    opacity: 1;
+    top: 40%;
+    transition: 0.1s ease;
+  }
+.input_element {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+  padding: 0.2rem;
+  min-height: 2.5rem;
+  width: 70%;
+  outline: none;
+}
+span.input_element{
+   text-align: center;
+}
+span.input_element.red{
+  text-align: center;
+  color: #B22222;
+}
+input.input_element, textarea.input_element{
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+}
+textarea.input_element.large{
+    min-height: 7rem;
+}
+.input_element.buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.todo_list {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 6vh 0 0 0 ;
+}
+
+.todo_card {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  min-height: 13rem;
+  width: 40rem;
+  padding: 1rem 0.5rem 1rem 0.5rem;
+  margin-top: 1rem;
+  background-color: #e5e5e5;
+  transition: 0.1s ease;
+  overflow: hidden;
+  opacity: 0;
+}
+.todo_card:hover {
+  box-shadow: 0 0 0.3rem 0.05rem #b3b3b3;
+}
+.todo_card:hover .buttonSection {
+  bottom: 4%;
+  opacity: 1;
+}
+.todo_card.deleted{
+  visibility: hidden;
+}
+.todo_card.animated{
+  opacity: 1;
+}
+.card_title {
+  min-width: 7rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+.card_description {
+  min-width: 30rem;
+  margin-left: 1.5rem;
+  font-size: 0.9rem;
+  overflow-wrap: break-word;
+  font-family: "Roboto", sans-serif;
+}
+.buttonSection {
+  position: absolute;
+  bottom: -10%;
+  right: 0.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  opacity: 0;
+  transition: 0.1s ease;
+}
+.card_button {
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  border: 0;
+  outline: none;
+  background-color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: "Roboto", sans-serif;
+  cursor: pointer;
+  transition: 0.1s ease;
+}
+.card_button:hover {
+  box-shadow: 0 0 0.2rem 0.05rem #b3b3b3;
+}
+.card_button:active {
+  box-shadow: 0 0 0.05rem 0.1rem #b3b3b3;
+}
+.message{
+  position: fixed;
+  top: -20%;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background-color: #f3f3f3;
+  color: #B22222;
+  font-size: 1.2rem;
+  text-align: center;
+  opacity: 0;
+  transition: 0.1s ease;
+  z-index: 4;
+}
+.message.active{
+  top: 0%;
+  opacity: 1;
+  transition: 0.1s ease;
+}
+.loading {
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  min-height: 100vh;
+  background-color: #ffffffda;
+  z-index: 2;
 }
-
-.App-link {
-  color: #61dafb;
+.loading_small {
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #ffffffda;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.loading_img {
+  width: 3rem;
+}
+.loading_img.small{
+  width: 1.5rem;
+  height: 1.5rem;
 }
