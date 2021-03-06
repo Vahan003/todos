@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 
 
-const Modal = ({ isOpen, onMessage, messageDate}) => {
-  const [show, setShow] = useState(false);
-  
+const Message = ({ isOpen, setIsOpenMessage, onMessage}) => {
   useEffect(()=>{
-    setShow(prev => !prev)
       setTimeout(() => {
-      setShow(prev => !prev)
-  }, 1000);
-  }, [messageDate])
+        setIsOpenMessage(false)
+  }, 1500);
+  }, [isOpen])
 
   return (
-    <span className={isOpen && show ? "message active" : "message"}>{onMessage}</span>
+    <span className={isOpen ? "message active" : "message"}>{onMessage}</span>
   );
 };
 
-export default Modal;
+export default Message;

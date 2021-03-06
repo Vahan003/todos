@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 import LoadingIcon from "../icon/loading.gif";
 
-const Modal = ({ isOpen, setOpen, onCreate, status, messageDate }) => {
+const Modal = ({
+  name,
+  updateMode,
+  element,
+  isOpen,
+  setOpen,
+  onCreate,
+  onUpdate,
+  status,
+  messageDate,
+  setElement,
+}) => {
   const [postValues, setPostValues] = useState({
     title: "",
     description: "",
@@ -17,6 +28,12 @@ const Modal = ({ isOpen, setOpen, onCreate, status, messageDate }) => {
   const onCreateHandle = async () => {
     setLoading((prev) => !prev);
     await onCreate(post);
+    setLoading((prev) => !prev);
+  };
+  const onUpdateHandle = async () => {
+    setLoading((prev) => !prev);
+    await onUpdate(post, element._id);
+    setElement({});
     setLoading((prev) => !prev);
   };
 
@@ -36,6 +53,20 @@ const Modal = ({ isOpen, setOpen, onCreate, status, messageDate }) => {
     }
   }, [status, messageDate]);
 
+  useEffect(() => {
+    if (updateMode) {
+      setPostValues({
+        title: element.title,
+        description:  element.description,
+        color: element.color,
+      });
+      setPost({
+        title: element.title,
+        description:  element.description,
+        color: element.color,
+      });
+    }
+  }, [updateMode]);
 
   const handleInputs = (e) => {
     setPostValues((prev) => ({
@@ -51,12 +82,16 @@ const Modal = ({ isOpen, setOpen, onCreate, status, messageDate }) => {
   return (
     <div className={isOpen ? "modal active" : "modal"}>
       <div className="input_section">
-        <span className="card_title input_element">Create New Todo</span>
-        {loading &&
+        <span className="card_title input_element">{name}</span>
+        {loading && (
           <div className="input_element loading_small">
-            <img src={LoadingIcon} alt = "Loading..." className="loading_img small"></img>
+            <img
+              src={LoadingIcon}
+              alt="Loading..."
+              className="loading_img small"
+            ></img>
           </div>
-        }
+        )}
 
         <input
           name="title"
@@ -80,13 +115,37 @@ const Modal = ({ isOpen, setOpen, onCreate, status, messageDate }) => {
           value={postValues.color}
         />
         <div className="input_element buttons">
-          <button className="card_button" onClick={!loading ? () => onCreateHandle() : ()=>{}}>
-            Create
-          </button>
+          {!updateMode ? (
+            <button
+              className="card_button"
+              onClick={!loading ? () => onCreateHandle() : () => {}}
+            >
+              Create
+            </button>
+          ) : (
+            <button
+              className="card_button"
+              onClick={!loading ? () => onUpdateHandle() : () => {}}
+            >
+              Update
+            </button>
+          )}
+
           <button
             className="card_button"
             onClick={() => {
               setOpen((prev) => !prev);
+              setPostValues({
+                title: "",
+                description: "",
+                color: "#ffffff",
+              });
+              setPost({
+                title: null,
+                description: null,
+                color: "#ffffff",
+              });
+              setElement({})
             }}
           >
             Cancel

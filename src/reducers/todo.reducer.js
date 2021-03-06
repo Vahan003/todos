@@ -2,8 +2,9 @@ const initialState = {
     getTodoStatus: false,
     postTodoStatus: false,
     deleteTodoStatus: false,
+    patchTodoStatus: false,
     deleteTime: "",
-    postTodo: "",
+    postTodo: {},
     message: "",
     messageDate: "",
     todo: []
@@ -16,7 +17,6 @@ const initialState = {
         ...state,
         getTodoStatus: true,
         todo: action.payload,
-        messageDate: state.messageDate
       }
       case 'GET_TODO_FAILURE':
       return {
@@ -40,6 +40,21 @@ const initialState = {
         message: action.payload,
         messageDate: new Date()
       }
+      case 'PATCH_TODO_SUCCSESS':
+        return {
+          ...state,
+          patchTodoStatus: true,
+          postTodo: action.payload,
+          message: "Updated!",
+          messageDate: new Date()
+        }
+        case 'PATCH_TODO_FAILURE':
+        return {
+          ...state,
+          patchTodoStatus: false,
+          message: action.payload,
+          messageDate: new Date()
+        }
       case 'DELETE_TODO_SUCCSESS':
       return {
         ...state,

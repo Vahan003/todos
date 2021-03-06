@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import {
   getTodoThunk,
   postTodoThunk,
+  patchTodoThunk,
   deleteTodoThunk,
 } from "./thunks/todo.thunk";
 import "./App.css";
@@ -16,15 +17,33 @@ function App(props) {
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenMessage, setIsOpenMessage] = useState(false);
+  const [element, setElement] = useState({})
+  const [updateMod, setUpdateMode] = useState(false)
+  const [modalName, setModalName] = useState("Create New Todo")
   const getTodosAsync = async () => {
     await props.getTodos();
     setLoading(false);
   };
+ useEffect(()=>{
+   if(JSON.stringify(element) !== JSON.stringify({})){
+     setUpdateMode(true)
+     setIsOpen(true)
+     setModalName("Update Todo")
+   }
+   else{
+    setUpdateMode(false)
+    setIsOpen(false)
+    setModalName("Create New Todo")
+   }
+ },[element])
+
   useEffect(() => {
     setLoading(true);
+    setTodos(prev => prev.filter(el => el._id !== element._id))
     getTodosAsync();
-  }, [props.postTodo._id, props.deleteTime]);
-
+    console.log(props.postTodo.date)
+  }, [props.postTodo._id,props.postTodo.date, props.deleteTime]);
+  
   useEffect(() => {
     if (props.getTodoStatus && props.todo.length !== todos.length) {
       setTodos(props.todo);
@@ -32,11 +51,10 @@ function App(props) {
   }, [props.todo]);
 
   useEffect(() => {
-    setIsOpenMessage(true);
+    if(props.messageDate){
+      setIsOpenMessage(true);
+    }
   }, [props.messageDate]);
-  useEffect(() => {
-    console.log(props)
-  }, [props]);
   return (
     <>
       <Bar setOpenModal={setIsOpen} />
@@ -44,17 +62,29 @@ function App(props) {
       <TodoList
         todos={todos}
         deleteTodo={props.deleteTodo}
-        onMessage={props.message}
+        setElement = {setElement}
+        loading = {loading}
       />
       <Modal
+        name = {modalName}
+        updateMode = {updateMod}
+        element = {element}
         isOpen={isOpen}
         setOpen={setIsOpen}
         onCreate={props.postTodos}
+        onUpdate={props.patchTodo}
         status={props.postTodoStatus}
-        messageDate ={props.messageDate}
+        messageDate={props.messageDate}
         postTodoId={props.postTodo._id}
+        setElement={setElement}
+        setUpdateMode ={setUpdateMode}
       />
-      <Message isOpen = {isOpenMessage} onMessage={props.message} messageDate ={props.messageDate}/>
+      <Message
+        isOpen={isOpenMessage}
+        setIsOpenMessage = {setIsOpenMessage}
+        onMessage={props.message}
+        messageDate={props.messageDate}
+      />
     </>
   );
 }
@@ -70,6 +100,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     postTodos: async (data) => {
       await dispatch(postTodoThunk(data));
+    },
+    patchTodo: async (data, id) => {
+      await dispatch(patchTodoThunk(data, id));
     },
     deleteTodo: async (id) => {
       await dispatch(deleteTodoThunk(id));

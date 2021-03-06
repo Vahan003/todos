@@ -118,10 +118,10 @@ textarea.input_element.large{
   width: 40rem;
   padding: 1rem 0.5rem 1rem 0.5rem;
   margin-top: 1rem;
-  background-color: #e5e5e5;
-  transition: 0.1s ease;
+  background-color: #f5f5f5;
+  transition: 0.3s ease;
   overflow: hidden;
-  opacity: 0;
+  opacity: 0.1;
 }
 .todo_card:hover {
   box-shadow: 0 0 0.3rem 0.05rem #b3b3b3;
@@ -134,6 +134,7 @@ textarea.input_element.large{
   visibility: hidden;
 }
 .todo_card.animated{
+  background-color: #e5e5e5;
   opacity: 1;
 }
 .card_title {
@@ -147,6 +148,7 @@ textarea.input_element.large{
   min-width: 30rem;
   margin-left: 1.5rem;
   font-size: 0.9rem;
+  text-align: right;
   overflow-wrap: break-word;
   font-family: "Roboto", sans-serif;
 }
@@ -169,7 +171,7 @@ textarea.input_element.large{
   font-weight: 600;
   font-family: "Roboto", sans-serif;
   cursor: pointer;
-  transition: 0.1s ease;
+  transition: 0.3s ease;
 }
 .card_button:hover {
   box-shadow: 0 0 0.2rem 0.05rem #b3b3b3;
@@ -179,22 +181,24 @@ textarea.input_element.large{
 }
 .message{
   position: fixed;
-  top: -20%;
-  left: 0;
-  right: 0;
+  top: -35vh;
+  left: 5rem;
+  right: 5rem;
   padding: 1rem;
-  background-color: #f3f3f3;
-  color: #B22222;
-  font-size: 1.2rem;
+  background-color: #eaeaea;
+  color: #b61a1a;
+  font-size: 1.4rem;
   text-align: center;
+  border-bottom: 0.1rem solid #000000;
+  box-shadow: 0 0 0.3rem 0.05rem #b3b3b3;
   opacity: 0;
-  transition: 0.1s ease;
+  transition: 0.4s ease;
   z-index: 4;
 }
 .message.active{
-  top: 0%;
+  top: 0;
   opacity: 1;
-  transition: 0.1s ease;
+  transition: 0.4s ease;
 }
 .loading {
   position: fixed;

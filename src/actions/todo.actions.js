@@ -16,6 +16,15 @@ export const getTodoSuccsess = (data) => ({
     type: 'POST_TODO_FAILURE',
     payload: err
   })
+  export const patchTodoSuccsess = (data) => ({
+    type: 'PATCH_TODO_SUCCSESS',
+    payload: data
+  })
+  
+  export const patchTodoFailure = (err) => ({
+    type: 'PATCH_TODO_FAILURE',
+    payload: err
+  })
   export const deleteTodoSuccsess = (time) => ({
     type: 'DELETE_TODO_SUCCSESS',
     payload: time

@@ -4,6 +4,8 @@ import {
   getTodoFailure,
   postTodoSuccsess,
   postTodoFailure,
+  patchTodoSuccsess,
+  patchTodoFailure,
   deleteTodoSuccsess,
   deleteTodoFailure,
 } from "../actions";
@@ -31,7 +33,25 @@ export const postTodoThunk = (data) => async (dispatch) => {
   }
 };
 
-export const patchTodoThunk = (data, id) => async (dispatch) => {};
+export const patchTodoThunk = (data, id) => async (dispatch) => {
+  try {
+    const response = await api.patchOrDeleteTodos(id).patch(data);
+    if(JSON.stringify(response.data) !== JSON.stringify(data)){
+       dispatch(patchTodoSuccsess({
+         ...response.data,
+         date: new Date()
+       }))
+    }
+    else{
+      dispatch(patchTodoFailure("Todo is missing attributes"));
+    }
+  } catch (err) {
+    if (err) {
+      dispatch(patchTodoFailure(err.response.data.message));
+    }
+  }
+
+};
 
 export const deleteTodoThunk = (id) => async (dispatch) => {
   try {
