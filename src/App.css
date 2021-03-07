@@ -50,7 +50,7 @@ body,
   z-index: 3;
 }
 .bar:hover + .hide {
-  top: -2vh;
+  top: +3vh;
   opacity: 0;
 }
 .modal {
