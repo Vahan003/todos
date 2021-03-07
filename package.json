@@ -2,7 +2,7 @@
   "name": "eachbase_task",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://vahan003.github.io/SomeAlco",
+  "homepage": "https://vahan003.github.io/todos",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
