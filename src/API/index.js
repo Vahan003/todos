@@ -7,8 +7,8 @@ const axiosInstance = axios.create({
 });
 
 const Endpoint = EndpointFactory(axiosInstance);
-
-export default   {
+const Endpoints = {
   getOrPostTodos: new Endpoint("todos"),
   patchOrDeleteTodos: (id) => new Endpoint("todos/" + id),
-};
+}
+export default  Endpoints;
