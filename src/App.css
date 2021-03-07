@@ -12,10 +12,26 @@ body,
   background-color: #f3f3f3;
   z-index: 1;
 }
-
+.hide {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #eaeaea;
+  transition: 0.1s ease-in-out;
+  opacity: 1;
+  border-bottom: 0.1rem solid #000000;
+  padding: 0.2rem 2rem;;
+  z-index: 1;
+}
+.in_bar {
+  position: absolute;
+  bottom: 0;
+}
 .bar {
   position: fixed;
-  top: -3%;
+  top: -2vh;
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -24,14 +40,18 @@ body,
   padding: 1rem 2rem;
   z-index: 2;
   opacity: 0;
-  transition: 0.1s ease;
+  transition: 0.1s ease-in-out;
   border-bottom: 0.1rem solid #000000;
   box-shadow: 0 0 0.3rem 0.05rem #b3b3b3;
-  z-index: 3;
 }
 .bar:hover {
   top: 0;
   opacity: 1;
+  z-index: 3;
+}
+.bar:hover + .hide {
+  top: -2vh;
+  opacity: 0;
 }
 .modal {
   position: fixed;
@@ -71,10 +91,10 @@ body,
   transition: 0.2s ease;
 }
 .modal.active .input_section {
-    opacity: 1;
-    top: 40%;
-    transition: 0.1s ease;
-  }
+  opacity: 1;
+  top: 40%;
+  transition: 0.1s ease;
+}
 .input_element {
   display: flex;
   justify-content: center;
@@ -84,30 +104,34 @@ body,
   width: 70%;
   outline: none;
 }
-span.input_element{
-   text-align: center;
-}
-span.input_element.red{
+span.input_element {
   text-align: center;
-  color: #B22222;
 }
-input.input_element, textarea.input_element{
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
+span.input_element.red {
+  text-align: center;
+  color: #b22222;
 }
-textarea.input_element.large{
-    min-height: 7rem;
+input.input_element,
+textarea.input_element {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
 }
-.input_element.buttons{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+textarea.input_element.large {
+  min-height: 7rem;
+}
+.input_element.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .todo_list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6vh 0 0 0 ;
+  padding: 6vh 0 0 0;
+}
+.todo_list.large {
+  font-size: 1.3rem;
 }
 
 .todo_card {
@@ -130,10 +154,10 @@ textarea.input_element.large{
   bottom: 4%;
   opacity: 1;
 }
-.todo_card.deleted{
+.todo_card.deleted {
   visibility: hidden;
 }
-.todo_card.animated{
+.todo_card.animated {
   background-color: #e5e5e5;
   opacity: 1;
 }
@@ -172,30 +196,43 @@ textarea.input_element.large{
   font-family: "Roboto", sans-serif;
   cursor: pointer;
   transition: 0.3s ease;
+  border-bottom: 0.09rem solid #ffffff;
+}
+.color_picker {
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  outline: none;
+  background-color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  font-family: "Roboto", sans-serif;
+  transition: 0.3s ease;
 }
 .card_button:hover {
+  border-bottom: 0.09rem solid #000000;
   box-shadow: 0 0 0.2rem 0.05rem #b3b3b3;
 }
 .card_button:active {
+  border-bottom: 0.09rem solid #646464;
   box-shadow: 0 0 0.05rem 0.1rem #b3b3b3;
 }
-.message{
+.message {
   position: fixed;
   top: -35vh;
-  left: 5rem;
-  right: 5rem;
-  padding: 1rem;
+  left: 0rem;
+  right: 0rem;
+  padding: 1rem 0;
   background-color: #eaeaea;
   color: #b61a1a;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   text-align: center;
   border-bottom: 0.1rem solid #000000;
   box-shadow: 0 0 0.3rem 0.05rem #b3b3b3;
   opacity: 0;
-  transition: 0.4s ease;
+  transition: 0.4s ease-in-out;
   z-index: 4;
 }
-.message.active{
+.message.active {
   top: 0;
   opacity: 1;
   transition: 0.4s ease;
@@ -227,7 +264,7 @@ textarea.input_element.large{
 .loading_img {
   width: 3rem;
 }
-.loading_img.small{
+.loading_img.small {
   width: 1.5rem;
   height: 1.5rem;
 }

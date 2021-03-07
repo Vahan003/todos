@@ -6,7 +6,7 @@ const TodoList = (props) => {
 
   return (
     <div className="todo_list">
-      {arr.reverse().map((el) => (
+      {arr.length ? arr.reverse().map((el) => (
         <TodoCard
           key={el._id}
           title={el.title}
@@ -19,7 +19,8 @@ const TodoList = (props) => {
             !loading && (await deleteTodo(el._id));
           }}
         />
-      ))}
+      )) : <span className="todo_list large">No Todos, Please create new one!</span>
+    }
     </div>
   );
 };
