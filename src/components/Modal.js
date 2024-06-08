@@ -6,76 +6,44 @@ const Modal = ({
   updateMode,
   element,
   isOpen,
-  setOpen,
   onCreate,
   onUpdate,
-  status,
-  messageDate,
-  setElement,
+  onCancel,
 }) => {
   const [postValues, setPostValues] = useState({
     title: "",
     description: "",
     color: "#ffffff",
   });
-  const [post, setPost] = useState({
-    title: null,
-    description: null,
-    color: "#ffffff",
-  });
+ 
   const [loading, setLoading] = useState(false);
 
   const onCreateHandle = async () => {
     setLoading((prev) => !prev);
-    await onCreate(post);
+    await onCreate(postValues);
     setLoading((prev) => !prev);
   };
+
   const onUpdateHandle = async () => {
     setLoading((prev) => !prev);
-    await onUpdate(post, element._id);
-    setElement({});
+    await onUpdate(postValues);
     setLoading((prev) => !prev);
   };
 
   useEffect(() => {
-    if (status) {
-      setOpen(false);
-      setPostValues({
-        title: "",
-        description: "",
-        color: "#ffffff",
-      });
-      setPost({
-        title: null,
-        description: null,
-        color: "#ffffff",
-      });
-    }
-  }, [status, messageDate]);
-
-  useEffect(() => {
-    if (updateMode) {
+    if(element){
       setPostValues({
         title: element.title,
-        description:  element.description,
-        color: element.color,
-      });
-      setPost({
-        title: element.title,
-        description:  element.description,
+        description: element.description,
         color: element.color,
       });
     }
-  }, [updateMode]);
+  }, [element]);
 
   const handleInputs = (e) => {
     setPostValues((prev) => ({
       ...prev,
       [e.target.name]: `${e.target.value}`,
-    }));
-    setPost((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value !== "" ? e.target.value : null,
     }));
   };
 
@@ -133,20 +101,7 @@ const Modal = ({
 
           <button
             className="card_button"
-            onClick={() => {
-              setOpen((prev) => !prev);
-              setPostValues({
-                title: "",
-                description: "",
-                color: "#ffffff",
-              });
-              setPost({
-                title: null,
-                description: null,
-                color: "#ffffff",
-              });
-              setElement({})
-            }}
+            onClick={onCancel}
           >
             Cancel
           </button>

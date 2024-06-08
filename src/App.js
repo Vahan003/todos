@@ -14,113 +14,115 @@ import Modal from "./components/Modal";
 import Message from "./components/Message";
 import AcceptModal from "./components/AcceptModal";
 function App(props) {
-  const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenMessage, setIsOpenMessage] = useState(false);
   const [isOpenAcceptModal, setIsOpenAcceptModal] = useState(false);
-  const [element, setElement] = useState({});
+  const [element, setElement] = useState(null);
   const [updateMod, setUpdateMode] = useState(false);
-  const [modalName, setModalName] = useState("Create New Todo");
   const [acceptText, setAcceptText] = useState(
     "Are you sure you want to delete all Todos?"
   );
-  const getTodosAsync = async () => {
+
+  const getTodos = async () => {
+    setLoading(true);
     await props.getTodos();
     setLoading(false);
   };
-  useEffect(() => {
-    if (JSON.stringify(element) !== JSON.stringify({})) {
-      setUpdateMode(true);
-      setIsOpen(true);
-      setModalName("Update Todo");
-    } else {
-      setUpdateMode(false);
-      setIsOpen(false);
-      setModalName("Create New Todo");
-    }
-  }, [element]);
-
-  useEffect(() => {
-    setLoading(true);
-    setTodos((prev) => prev.filter((el) => el._id !== element._id));
-    getTodosAsync();
-  }, [props.postTodo._id, props.postTodo.date, props.deleteTime]);
-
-  useEffect(() => {
-    if (props.getTodoStatus && props.todo.length !== todos.length) {
-      setTodos(props.todo);
-    }
-  }, [props.todo]);
-
-  useEffect(() => {
-    if (props.messageDate) {
-      setIsOpenMessage(true);
-    }
-  }, [props.messageDate]);
 
   const deleteAllTodos = async () => {
-    setLoading(true);
-    for await (let todo of todos) {
-      props.deleteTodo(todo._id);
-    }
-    if (!todos.length) {
+    if (!props.todos.length) {
       setAcceptText("No Todos!");
+      return;
     }
-    setLoading(false);
+
+    for (let todo of props.todos) {
+      await props.deleteTodo(todo?.id);
+    }
+
+    setIsOpenAcceptModal(false);
+
+    await getTodos();
   };
+
+  const onUpdate = (el) => {
+    setElement(el);
+    setUpdateMode(true);
+    setIsOpen(true);
+  };
+
+  const onCreateFromModal = async (data) => {
+    await props.postTodos(data);
+    setIsOpen(false);
+    await props.getTodos();
+  };
+
+  const onUpdateFromModal = async (data) => {
+    await props.patchTodo(data, element.id);
+    setIsOpen(false);
+    setUpdateMode(false);
+    setElement(null);
+    await props.getTodos();
+  };
+
+  const onCancel = () => {
+    setIsOpen(false);
+    setUpdateMode(false);
+  };
+
+  const onCancelAccept = () => {
+    setIsOpenAcceptModal(false);
+  };
+
+  const onDelete = async (id) => {
+    await props.deleteTodo(id);
+    await props.getTodos();
+  };
+
+  const onDeleteAllTodos = () => {
+    setIsOpenAcceptModal(true);
+    setAcceptText("Are you sure you want to delete all Todos?");
+  };
+
+  useEffect(() => {
+    getTodos();
+  }, []);
 
   return (
     <>
-      <Bar
-        setOpenModal={setIsOpen}
-        onDeleteAll={() => {
-          setIsOpenAcceptModal(true);
-          setAcceptText("Are you sure you want to delete all Todos?");
-        }}
-      />
+      <Bar setOpenModal={setIsOpen} onDeleteAll={onDeleteAllTodos} />
       <AcceptModal
         text={acceptText}
         isOpen={isOpenAcceptModal}
-        setIsOpen={setIsOpenAcceptModal}
+        onCancel={onCancelAccept}
         onAccept={deleteAllTodos}
-        loading = {loading}
+        loading={loading}
       />
       {loading && <Loading />}
       <TodoList
-        todos={todos}
-        deleteTodo={props.deleteTodo}
-        setElement={setElement}
+        todos={props.todos}
+        onDelete={onDelete}
+        onUpdate={onUpdate}
         loading={loading}
       />
       <Modal
-        name={modalName}
+        name={updateMod ? "Update Todo" : "Create New Todo"}
         updateMode={updateMod}
         element={element}
         isOpen={isOpen}
-        setOpen={setIsOpen}
-        onCreate={props.postTodos}
-        onUpdate={props.patchTodo}
-        status={props.postTodoStatus}
-        messageDate={props.messageDate}
-        postTodoId={props.postTodo._id}
-        setElement={setElement}
-        setUpdateMode={setUpdateMode}
+        onCreate={onCreateFromModal}
+        onUpdate={onUpdateFromModal}
+        onCancel={onCancel}
       />
-      <Message
-        isOpen={isOpenMessage}
-        setIsOpenMessage={setIsOpenMessage}
-        onMessage={props.message}
-        messageDate={props.messageDate}
-      />
+      <Message message={props.message} messageDate={props.messageDate} />
     </>
   );
 }
 
 const mapStateToProps = (state) => {
-  const { todo } = state;
-  return todo;
+  const { todos } = state;
+  return todos;
 };
+
 const mapDispatchToProps = (dispatch) => {
   return {
     getTodos: async () => {

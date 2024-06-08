@@ -1,15 +1,20 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState } from "react";
 
+const Message = ({ message, messageDate }) => {
+  const [isOpenMessage, setIsOpenMessage] = useState(false);
 
-const Message = ({ isOpen, setIsOpenMessage, onMessage}) => {
-  useEffect(()=>{
-      setTimeout(() => {
-        setIsOpenMessage(false)
-  }, 1500);
-  }, [isOpen])
+  useEffect(() => {
+    message && setIsOpenMessage(true);
+
+    setTimeout(() => {
+      setIsOpenMessage(false);
+    }, 1500);
+  }, [messageDate]);
 
   return (
-    <span className={isOpen ? "message active" : "message"}>{onMessage}</span>
+    <span className={isOpenMessage ? "message active" : "message"}>
+      {message}
+    </span>
   );
 };
 

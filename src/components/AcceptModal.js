@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LoadingIcon from "../icon/loading.gif";
-const AcceptModal = ({ text, isOpen, setIsOpen, onAccept, loading }) => {
+const AcceptModal = ({ text, isOpen, onCancel, onAccept }) => {
+  const [loading, setLoading] = useState(false);
+
   const onAcceptAsync = async () => {
+    setLoading((prev) => !prev);
     await onAccept();
+    setLoading((prev) => !prev);
   };
+
   return (
     <div className={isOpen ? "modal active" : "modal"}>
       <div className="input_section">
@@ -23,9 +28,7 @@ const AcceptModal = ({ text, isOpen, setIsOpen, onAccept, loading }) => {
           </button>
           <button
             className="card_button"
-            onClick={() => {
-              setIsOpen(false);
-            }}
+            onClick={onCancel}
           >
             Cancel
           </button>

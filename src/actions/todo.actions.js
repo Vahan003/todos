@@ -1,5 +1,5 @@
-export const getTodoSuccsess = (data) => ({
-    type: 'GET_TODO_SUCCSESS',
+export const getTodoSuccess = (data) => ({
+    type: 'GET_TODO_SUCCESS',
     payload: data
   })
   
@@ -7,17 +7,17 @@ export const getTodoSuccsess = (data) => ({
     type: 'GET_TODO_FAILURE',
     payload: err
   })
-  export const postTodoSuccsess = (data) => ({
-    type: 'POST_TODO_SUCCSESS',
+  export const postTodoSuccess = (data) => ({
+    type: 'POST_TODO_SUCCESS',
     payload: data
   })
-  
+
   export const postTodoFailure = (err) => ({
     type: 'POST_TODO_FAILURE',
     payload: err
   })
-  export const patchTodoSuccsess = (data) => ({
-    type: 'PATCH_TODO_SUCCSESS',
+  export const patchTodoSuccess = (data) => ({
+    type: 'PATCH_TODO_SUCCESS',
     payload: data
   })
   
@@ -25,8 +25,8 @@ export const getTodoSuccsess = (data) => ({
     type: 'PATCH_TODO_FAILURE',
     payload: err
   })
-  export const deleteTodoSuccsess = (time) => ({
-    type: 'DELETE_TODO_SUCCSESS',
+  export const deleteTodoSuccess = (time) => ({
+    type: 'DELETE_TODO_SUCCESS',
     payload: time
   })
   

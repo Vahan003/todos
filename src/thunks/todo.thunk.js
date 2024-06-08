@@ -1,19 +1,20 @@
 import api from "../API";
 import {
-  getTodoSuccsess,
+  getTodoSuccess,
   getTodoFailure,
-  postTodoSuccsess,
+  postTodoSuccess,
   postTodoFailure,
-  patchTodoSuccsess,
+  patchTodoSuccess,
   patchTodoFailure,
-  deleteTodoSuccsess,
+  deleteTodoSuccess,
   deleteTodoFailure,
 } from "../actions";
 
 export const getTodoThunk = () => async (dispatch) => {
   try {
     const response = await api.getOrPostTodos.get();
-    dispatch(getTodoSuccsess(response.data));
+    console.log("response", response);
+    dispatch(getTodoSuccess(response.data));
   } catch (err) {
     console.error("FROM GET_THUNK", err);
     if (err.response) {
@@ -25,50 +26,48 @@ export const getTodoThunk = () => async (dispatch) => {
 export const postTodoThunk = (data) => async (dispatch) => {
   try {
     const response = await api.getOrPostTodos.post(data);
-    dispatch(postTodoSuccsess(response.data));
+    console.log("response", response);
+    dispatch(postTodoSuccess(response.data));
   } catch (err) {
     if (err.response) {
-      dispatch(postTodoFailure(err.response.data.message));
+      dispatch(postTodoFailure(err.response.data?.message));
     }
   }
 };
 
 export const patchTodoThunk = (data, id) => async (dispatch) => {
   try {
-    const response = await api.patchOrDeleteTodos(id).patch(data);
-    if(JSON.stringify(response.data) !== JSON.stringify(data)){
-       dispatch(patchTodoSuccsess({
-         ...response.data,
-         date: new Date()
-       }))
-    }
-    else{
+    const response = await api.patchOrDeleteTodos(id).put(data);
+    console.log("response", response);
+    if (response.status === 200) {
+      dispatch(
+        patchTodoSuccess({
+          ...response.data,
+          date: new Date(),
+        })
+      );
+    } else {
       dispatch(patchTodoFailure("Todo is missing attributes"));
     }
   } catch (err) {
     if (err) {
-      dispatch(patchTodoFailure(err.response.data.message));
+      dispatch(patchTodoFailure(err.response.data?.message));
     }
   }
-
 };
 
 export const deleteTodoThunk = (id) => async (dispatch) => {
   try {
     const response = await api.patchOrDeleteTodos(id).delete();
-    if(response.data.deletedCount){
-         dispatch(deleteTodoSuccsess(response.data.operationTime));
+    console.log("response", response);
+    if (response.status === 200) {
+      dispatch(deleteTodoSuccess(new Date()));
+      return;
     }
-    else if(response.data.message){
-        dispatch(deleteTodoFailure(response.data.message));
-    }
-    else if(!response.data.deletedCount){
-        dispatch(deleteTodoFailure("Todo not found"));
-    }
-
+    dispatch(deleteTodoFailure(response.message));
   } catch (err) {
     if (err) {
-       dispatch(deleteTodoFailure(err));
+      dispatch(deleteTodoFailure(err));
     }
   }
 };

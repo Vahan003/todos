@@ -14,15 +14,15 @@ const TodoCard = (props) => {
   return (
     <div
       className={animate ? "todo_card animated" : "todo_card"}
-      style={{ borderBottom: `0.4rem solid ${color ?? "#E5E5E5"}` }}
+      style={{ borderBottom: `0.4rem solid ${color || "#E5E5E5"}` }}
     >
-      <h3 className="card_title">{title ?? "No title!"}</h3>
-      <p className="card_description">{description ?? "No description!"}</p>
+      <h3 className="card_title">{title || "No title!"}</h3>
+      <p className="card_description">{description || "No description!"}</p>
       <div className="buttonSection">
         <div
           className="color_picker"
           style={{
-            borderBottom: `0.3rem solid ${color ?? "#E5E5E5"}`,
+            borderBottom: `0.3rem solid ${color || "#E5E5E5"}`,
           }}
         >
           {color}
